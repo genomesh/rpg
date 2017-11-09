@@ -1,0 +1,15 @@
+div#gameArea {
+    width: 800px;
+    height: 625px;
+    background: #6a6a6a;
+    padding: 5px;
+    margin: 50px auto;
+}
+div#gameArea > canvas {
+    background: #f1f1f1;
+    float: left;
+}
+
+div#gameArea > canvas.stats {
+    background: #6a6a6a;
+}
