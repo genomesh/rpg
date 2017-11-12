@@ -1,8 +1,8 @@
 function char () {
   let x, y, sigma, a, b;
   return {
-    as : 20,
-    cd : 0,
+    basic : {cd : 0,maxcd : 20, dmg : 10,currently : false},
+    e : {cd : 0,maxcd : 20,currently : false},
     xp : 0,
     lvl : 0,
     mhp : 100,
@@ -25,9 +25,30 @@ function char () {
           }
         }
       } else {this.immunity -= 1;}
+      this.attack();
       if (this.chp < 1) {this.death();}
       this.move();
       this.draw();
+    },
+    attack : function () {
+      if (this.basic.currently) {
+        this.bcont();
+      };
+      if (this.basic.cd === 0) {
+        if (mouse.down) {
+          this.basic.cd = this.basic.maxcd;
+          this.bstart();
+        }
+      } else { this.basic.cd -= 1;}
+      if (this.e.currently) {
+        this.econt();
+      };
+      if (this.e.cd === 0) {
+        if (canvas.keys[69]) {
+          this.e.cd = this.e.maxcd;
+          this.estart();
+        }
+      } else { this.e.cd -= 1;}
     },
     xpinc : function (amount) {
       this.xp += amount;

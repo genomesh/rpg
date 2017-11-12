@@ -2,7 +2,7 @@ function mob () {
   return {
     w : 15,
     h : 15,
-    hp : 2,
+    hp : 30,
     onhitdmg : 10,
     xpval : 10,
     invulnerable : 0,
@@ -35,10 +35,10 @@ function mob () {
         }
       }
     },
-    onTouch : function () {
+    takeDmg : function (x) {
       this.collide();
-      if (this.invulnerable < 0) {this.hp -= 1; this.invulnerable = 10;}
-      if (this.hp == 0) {user.xpinc(this.xpval); return true}
+      if (this.invulnerable < 0) {this.hp -= x; this.invulnerable = 10;}
+      if (this.hp < 1) {user.xpinc(this.xpval); return true}
     },
     collide : function() {
       this.currentDelay = this.colourDelay;

@@ -1,8 +1,9 @@
-function arrow (px,py,vx,vy,sig,pierce) {
+function arrow (px,py,vx,vy,sig,pierce,dmg) {
   let arrowimg = document.getElementById('arrow');
   return {
     sigma: sig,
     speed : 9,
+    dmg : dmg,
     pierce : pierce,
     img : arrowimg,
     h : arrowimg.height,
@@ -32,7 +33,7 @@ function arrow (px,py,vx,vy,sig,pierce) {
     test : function () {
       for (let i = 0; i<mobs.length;i++){
         if(checkTouching(mobs[i],this)) {
-          if (mobs[i].onTouch()) {
+          if (mobs[i].takeDmg(this.dmg)) {
             mobs.splice(i,1);
             i -= 1;
           }

@@ -1,10 +1,10 @@
-let user, mobs, bd, bm, userpp, arrowimg;
+let user, mobs
 
 function init () {
   spawntimer = 0;
   bullets = [];
   mobs = [];
-  user = huntress();
+  user = senshi();
   createStats();
   createCanvas();
   mobs[0] = blooper();
@@ -29,4 +29,10 @@ let checkTouching = function (o1,o2) {
   } else {
     return true;
   }
+}
+
+function distBetween (o1,o2) {
+  let xd = o1.pos[0] - o2.pos[0];
+  let yd = o1.pos[1] - o2.pos[1];
+  return Math.hypot(xd,yd)
 }

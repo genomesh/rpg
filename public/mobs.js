@@ -2,7 +2,7 @@ function slime () {
   let obj = mob();
   obj.h=18;
   obj.w=18;
-  obj.hp = 3;
+  obj.hp = 30;
   obj.onhitdmg = 20;
   obj.xpval = 15;
   obj.mcd = [30,60];
@@ -45,6 +45,7 @@ function slime () {
 function blooper () {
   let obj = mob();
   obj.xpval = 75;
+  obj.hp = 50;
   obj.onhitdmg = 50;
   obj.colour = 'purple';
   return obj;
