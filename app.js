@@ -3,10 +3,6 @@ var bodyParser = require('body-parser');
 var express  = require('express');
 var app = express();
 var path = require('path');
-var socket = require('socket.io');
-
-var squares = [];
-
 app.use(express.static(path.join(__dirname,'public')));
 app.use(bodyParser.json());
 
