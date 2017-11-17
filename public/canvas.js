@@ -1,10 +1,11 @@
-let canvas, ctx, mouse, spawntimer;
+let canvas, ctx, mouse, spawntimer, arena;
 
 function createCanvas () {
   canvas = document.createElement('canvas');
   canvas.height = 500;
   canvas.width = 800;
   canvas.keys = [];
+  arena = createBackground();
   mouse = {
     pos : [0,0]
   }
@@ -31,6 +32,13 @@ function createCanvas () {
   })
 }
 
+function createBackground (x,y,img) {
+  return {
+    x : x,
+    y : y
+  }
+}
+
 function updateCanvas () {
   spawntimer += 1;
   if (spawntimer % 30 == 0) {mobs.push(slime())}
@@ -41,6 +49,6 @@ function updateCanvas () {
 
 function updateMousePos (c, e) {
   var rect = c.getBoundingClientRect();
-  mouse.pos[0] = e.clientX - rect.left;
-  mouse.pos[1] = e.clientY - rect.top
+  mouse.pos[0] = user.pos[0] -canvas.width/2+ e.clientX - rect.left;
+  mouse.pos[1] = user.pos[1] -canvas.height/2 + e.clientY - rect.top
 }

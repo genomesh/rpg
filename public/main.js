@@ -4,7 +4,7 @@ function init () {
   spawntimer = 0;
   bullets = [];
   mobs = [];
-  user = senshi();
+  user = huntress();
   createStats();
   createCanvas();
   mobs[0] = blooper();

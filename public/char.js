@@ -73,7 +73,36 @@ function char () {
     },
     draw : function () {
       ctx.fillStyle = this.colour;
-      ctx.fillRect(this.pos[0]-this.w/2,this.pos[1]-this.h/2,this.w,this.h);
+      if (this.image) {ctx.drawImage(this.image,canvas.width/2-this.w/2,canvas.height/2-this.h/2,this.w,this.h)}
+      else {ctx.fillRect(canvas.width/2-this.w/2,canvas.height/2-this.h/2,this.w,this.h);}
     }
   }
+}
+
+function weapon () {
+  return {
+    img : ,
+    draw : function () {}
+  }
+}
+
+function meleestart () {
+  this.startRad = pointto(this,mouse) - this.swingRad/2;
+  //console.log(pointto(this,mouse));
+  this.endRad = pointto(this,mouse) + this.swingRad/2;
+  this.basic.currently = true; //add with animation
+}
+function meleecont () {
+  for (let i = 0; i<mobs.length; i++) {
+    if (this.startRad < pointto(this, mobs[i]) &&
+        this.endRad > pointto(this, mobs[i]) &&
+        this.swingrange + mobs[i].w/2 > distBetween(this,mobs[i])) {
+          console.log('hit!')
+          if (mobs[i].takeDmg(this.basic.dmg)) {
+            mobs.splice(i,1);
+            i -= 1;
+          }
+        }
+  }
+  this.basic.currently = false;
 }
