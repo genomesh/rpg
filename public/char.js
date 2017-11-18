@@ -70,6 +70,8 @@ function char () {
       this.vel[1] *= 0.925;
       this.pos[0] += this.vel[0];
       this.pos[1] += this.vel[1];
+      mouse.pos[0] += this.vel[0];
+      mouse.pos[1] += this.vel[1];
     },
     draw : function () {
       ctx.fillStyle = this.colour;
@@ -79,30 +81,58 @@ function char () {
   }
 }
 
-function weapon () {
+function weapon (imgid) {
+  let img = document.getElementById(imgid);
   return {
-    img : ,
-    draw : function () {}
+    image : img,
+    frame : 0,
+    maxframe : 5,
+    frameRotates : [5/8,1/2,1/6,-1/6,-1/2,-5/8],
+    w : img.width*4/10,
+    h : img.height*4/10,
+    currentSide : Math.PI/4,
+    leftright : 1,
+    range : 100,
+    currentRotate : 0,
+    sig : Math.PI/4,
+    dpos : [0,0],
+    draw : function (rad) {
+      this.currentRotate = rad;
+      ctx.translate(canvas.width/2, canvas.height/2);
+      ctx.rotate(this.currentRotate + this.sig + this.currentSide);
+      ctx.drawImage(this.image,0,-this.h,this.w,this.h);
+      ctx.rotate(-this.currentSide -this.sig - this.currentRotate);
+      ctx.translate(-canvas.width/2, -canvas.height/2);
+    }
   }
 }
 
 function meleestart () {
-  this.startRad = pointto(this,mouse) - this.swingRad/2;
+  this.startRad = pointto(this,mouse) + this.weapon.frameRotates[this.weapon.frameRotates.length-1]* Math.PI;
   //console.log(pointto(this,mouse));
-  this.endRad = pointto(this,mouse) + this.swingRad/2;
+  this.endRad = pointto(this,mouse) + this.weapon.frameRotates[0]* Math.PI;
   this.basic.currently = true; //add with animation
 }
 function meleecont () {
-  for (let i = 0; i<mobs.length; i++) {
-    if (this.startRad < pointto(this, mobs[i]) &&
-        this.endRad > pointto(this, mobs[i]) &&
-        this.swingrange + mobs[i].w/2 > distBetween(this,mobs[i])) {
-          console.log('hit!')
-          if (mobs[i].takeDmg(this.basic.dmg)) {
-            mobs.splice(i,1);
-            i -= 1;
-          }
+  let w = this.weapon;
+  w.currentSide = w.frameRotates[w.frame] * w.leftright * Math.PI;
+  if (w.frame === 2) {
+    for (let i = 0; i<mobs.length; i++) {
+      if (this.startRad < pointto(this, mobs[i]) &&
+          this.endRad > pointto(this, mobs[i]) &&
+          w.range + mobs[i].w/2 > distBetween(this,mobs[i])) {
+        console.log('hit!')
+        if (mobs[i].takeDmg(this.basic.dmg)) {
+          mobs.splice(i,1);
+          i -= 1;
         }
+      }
+    }
   }
-  this.basic.currently = false;
+  w.frame += 1;
+  if (w.frame === w.frameRotates.length) {
+    this.basic.currently = false;
+    w.leftright *= -1;
+    w.frame = 0;
+  }
 }

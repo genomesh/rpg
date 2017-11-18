@@ -4,7 +4,7 @@ function init () {
   spawntimer = 0;
   bullets = [];
   mobs = [];
-  user = huntress();
+  user = thuldrom();
   createStats();
   createCanvas();
   mobs[0] = blooper();

@@ -81,6 +81,7 @@ function thuldrom () {
   let obj = char();
   obj.swingRad = 1;
   obj.image = timg;
+  obj.weapon = weapon('hammer');
   obj.w = timg.width/10*4;
   obj.h = timg.height/10*4;
   obj.swingrange = 100;
@@ -113,6 +114,7 @@ function thuldrom () {
     if (this.chp < 1) {this.death();}
     this.move();
     this.attack();
+    this.weapon.draw(pointto(this,mouse));
     this.draw();
   };
   return obj;
