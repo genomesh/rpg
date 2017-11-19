@@ -1,4 +1,4 @@
-function arrow (px,py,vx,vy,sig,pierce,dmg) {
+function arrow (px,py,vx,vy,sig,pierce,dmg,target) {
   let arrowimg = document.getElementById('arrow');
   return {
     sigma: sig,
@@ -8,12 +8,14 @@ function arrow (px,py,vx,vy,sig,pierce,dmg) {
     img : arrowimg,
     h : arrowimg.height,
     w : arrowimg.width,
+    target : target,
     pos : [px,py],
     dpos : [0,0],
     timer : 20,
     colour : 'red',
     vel : [vx/4+15 * Math.cos(sig),vy/4+15 * Math.sin(sig)],
     update : function () {
+      console.log('arrowupdate');
       this.move();
       this.draw();
       this.timer -= 1;
@@ -34,14 +36,23 @@ function arrow (px,py,vx,vy,sig,pierce,dmg) {
       ctx.translate(-this.dpos[0], -this.dpos[1]);
     },
     test : function () {
-      for (let i = 0; i<mobs.length;i++){
-        if(checkTouching(mobs[i],this)) {
-          if (mobs[i].takeDmg(this.dmg)) {
-            mobs.splice(i,1);
-            i -= 1;
-          }
+      if (this.target) {
+        if (checkTouching(this,this.target)) {
+          console.log('yeet');
+          this.target.takeDmg(this.dmg);
           if (this.pierce == 0) return true;
           else this.pierce -= 1;
+        }
+      } else {
+        for (let i = 0; i<mobs.length;i++){
+          if(checkTouching(mobs[i],this)) {
+            if (mobs[i].takeDmg(this.dmg)) {
+              mobs.splice(i,1);
+              i -= 1;
+            }
+            if (this.pierce == 0) return true;
+            else this.pierce -= 1;
+          }
         }
       }
     }

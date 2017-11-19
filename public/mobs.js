@@ -48,5 +48,44 @@ function blooper () {
   obj.hp = 50;
   obj.onhitdmg = 50;
   obj.colour = 'purple';
+  obj.spawntimer = 0;
+  obj.update = function () {
+    this.invulnerable -= 1;
+    this.spawntimer += 1;
+    this.spawnslime();
+    this.draw();
+  };
+  obj.spawnslime = function () {
+    if (this.spawntimer % 30 == 0) {mobs.push(slime())}
+  }
+  return obj;
+}
+
+function goblinarcher () {
+  let obj = mob();
+  obj.mcd = [30,60];
+  obj.ccd = 0;
+  obj.xpval = 75;
+  obj.hp = 40;
+  obj.arrows = [];
+  obj.onhitdmg = 15;
+  obj.arrowdmg = 50;
+  obj.colour = 'green';
+  obj.update = function () {
+    this.invulnerable -= 1;
+    if (this.ccd == 0) {
+      this.shoot();
+      this.ccd = this.mcd[0] + Math.floor(Math.random()*this.mcd[1]);
+    } else {this.ccd -= 1;}
+    for (let i = 0; i<this.arrows.length;i++) {
+      this.arrows[i].update();
+      if (this.arrows[i].test()) {this.arrows.splice(i,1); i -= 1; break}
+      if (this.arrows[i].timer == 0) { this.arrows.splice(i,1); i -=1; break}
+    }
+    this.draw();
+  };
+  obj.shoot = function () {
+    this.arrows.push(arrow(this.pos[0],this.pos[1],0,0,pointto(this,user),0,this.arrowdmg,user));
+  }
   return obj;
 }

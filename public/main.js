@@ -8,11 +8,15 @@ function init () {
   createStats();
   createCanvas();
   mobs[0] = blooper();
-  mobs[0].pos = [canvas.width/4,canvas.height*3/4];
-  mobs[1] = blooper();
+  mobs[0].pos = [canvas.width/2,canvas.height/2];
+  mobs[4] = goblinarcher();
+  mobs[4].pos = [canvas.width/4,canvas.height*3/4];
+  mobs[1] = goblinarcher();
   mobs[1].pos = [canvas.width/4,canvas.height/4];
-  mobs[2] = blooper();
+  mobs[2] = goblinarcher();
   mobs[2].pos = [canvas.width*3/4,canvas.height/4];
+  mobs[3] = goblinarcher();
+  mobs[3].pos = [canvas.width*3/4,canvas.height*3/4]
   console.log('init completed');
 }
 
@@ -29,6 +33,10 @@ let checkTouching = function (o1,o2) {
   } else {
     return true;
   }
+}
+
+function death () {
+  user = thuldrom();
 }
 
 function distBetween (o1,o2) {

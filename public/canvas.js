@@ -1,4 +1,4 @@
-let canvas, ctx, mouse, spawntimer, arena;
+let canvas, ctx, mouse, arena;
 
 function createCanvas () {
   canvas = document.createElement('canvas');
@@ -41,7 +41,7 @@ function createBackground (x,y,img) {
 
 function updateCanvas () {
   spawntimer += 1;
-  if (spawntimer % 30 == 0) {mobs.push(slime())}
+  //if (spawntimer % 30 == 0) {mobs.push(slime())}
   ctx.clearRect(0,0,canvas.width,canvas.height);
   for (let i = 0; i < mobs.length; i++) {mobs[i].update()}
   user.update();

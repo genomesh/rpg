@@ -7,7 +7,7 @@ function huntress () {
       for (let i = 0; i<mobs.length;i++) {
         if (checkTouching(this,mobs[i])) {
           this.chp -= mobs[i].onhitdmg;
-          this.immunity = 40;
+          this.immunity = 20;
           break;
         }
       }
@@ -40,8 +40,10 @@ function huntress () {
 
 function senshi () {
   let obj = char();
+  obj.mhp = 100;
+  obj.chp = 100;
   obj.swingRad = 1;
-  obj.swingrange = 100;
+  obj.weapon = weapon('hammer');
   this.startRad = 0;
   this.endRad = 0;
   obj.bstart = meleestart;
@@ -54,7 +56,7 @@ function senshi () {
     this.as = 20 - this.lvl;
     this.cmp = this.mmp;
     this.chp = this.mhp;
-    if (this.lvl % 5 == 0 && this.swingrange < 200) {this.swingrange += 20;}
+    if (this.lvl % 5 == 0 && this.weapon.range < 200) {this.weapon.range += 20;}
     if (this.as < 10) this.as = 10;
     this.lvlup();
   };
@@ -62,8 +64,7 @@ function senshi () {
     if (this.immunity == 0) {
       for (let i = 0; i<mobs.length;i++) {
         if (checkTouching(this,mobs[i])) {
-          this.chp -= mobs[i].onhitdmg;
-          this.immunity = 40;
+          this.takeDmg(mobs[i].onhitdmg);
           break;
         }
       }
@@ -80,6 +81,8 @@ function thuldrom () {
   let timg = document.getElementById('thuldrom')
   let obj = char();
   obj.swingRad = 1;
+  obj.mhp = 150;
+  obj.chp = 150;
   obj.image = timg;
   obj.weapon = weapon('hammer');
   obj.w = timg.width/10*4;
@@ -97,7 +100,7 @@ function thuldrom () {
     this.as = 20 - this.lvl;
     this.cmp = this.mmp;
     this.chp = this.mhp;
-    if (this.lvl % 5 == 0 && this.swingrange < 200) {this.swingrange += 20;}
+    if (this.lvl % 5 == 0 && this.weapon.range < 200) {this.weapon.range += 20;}
     if (this.as < 10) this.as = 10;
     this.lvlup();
   };
@@ -105,8 +108,7 @@ function thuldrom () {
     if (this.immunity == 0) {
       for (let i = 0; i<mobs.length;i++) {
         if (checkTouching(this,mobs[i])) {
-          this.chp -= mobs[i].onhitdmg;
-          this.immunity = 40;
+          this.takeDmg(mobs[i].onhitdmg);
           break;
         }
       }

@@ -5,8 +5,8 @@ function char () {
     e : {cd : 0,maxcd : 20,currently : false},
     xp : 0,
     lvl : 0,
-    mhp : 100,
-    chp : 100,
+    mhp : 75,
+    chp : 75,
     mmp : 100,
     cmp : 100,
     immunity : 0,
@@ -15,12 +15,17 @@ function char () {
     colour : 'black',
     vel : [0,0],
     pos : [10,10],
+    takeDmg : function (dmg) {
+      if (this.immunity == 0) {
+        this.chp -= dmg;
+        this.immunity = 20;
+      }
+    },
     update : function () {
       if (this.immunity == 0) {
         for (let i = 0; i<mobs.length;i++) {
           if (checkTouching(this,mobs[i])) {
-            this.chp -= mobs[i].onhitdmg;
-            this.immunity = 40;
+            this.takeDmg(mobs[i].onhitdmg);
             break;
           }
         }
@@ -60,7 +65,7 @@ function char () {
       if (this.as < 10) this.as = 10;
       this.lvlup();
     },
-    death : function () {this.chp = 1;console.log('dead')},
+    death : function () {death()},
     move : function () {
       if (canvas.keys[65] && this.vel[0] > -7) {this.vel[0] -= 0.5};
       if (canvas.keys[68] && this.vel[0] < 7) {this.vel[0] += 0.5};
