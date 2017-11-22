@@ -15,7 +15,6 @@ function arrow (px,py,vx,vy,sig,pierce,dmg,target) {
     colour : 'red',
     vel : [vx/4+15 * Math.cos(sig),vy/4+15 * Math.sin(sig)],
     update : function () {
-      console.log('arrowupdate');
       this.move();
       this.draw();
       this.timer -= 1;
@@ -25,8 +24,6 @@ function arrow (px,py,vx,vy,sig,pierce,dmg,target) {
       this.pos[1] += this.vel[1];
     },
     draw : function () {
-      //ctx.fillStyle = this.colour;
-      //ctx.fillRect(this.pos[0]-this.w/2,this.pos[1]-this.h/2,this.w,this.h);
       this.dpos[0] = canvas.width/2 - user.pos[0] + this.pos[0];
       this.dpos[1] = canvas.height/2 - user.pos[1] + this.pos[1];
       ctx.translate(this.dpos[0], this.dpos[1]);

@@ -39,14 +39,20 @@ function huntress () {
 }
 
 function senshi () {
+  let timg = document.getElementById('senshi')
   let obj = char();
   obj.mhp = 100;
+  obj.basic.maxcd = 15;
   obj.chp = 100;
-  obj.swingRad = 1;
-  obj.weapon = weapon('hammer');
+  obj.image = timg;
+  obj.weapon = weapon('redkatana');
+  obj.weapon.w = obj.weapon.image.width*3/10,
+  obj.weapon.h = obj.weapon.image.height*3/10,
+  obj.w = timg.width/10*2;
+  obj.h = timg.height/10*2;
   this.startRad = 0;
   this.endRad = 0;
-  obj.bstart = meleestart;
+  obj.bstart = function() {this.basic.currently = true};
   obj.bcont = meleecont;
   obj.estart = function() {
     console.log('e attack');
@@ -72,6 +78,7 @@ function senshi () {
     if (this.chp < 1) {this.death();}
     this.move();
     this.attack();
+    this.weapon.draw(pointto(this,mouse));
     this.draw();
   };
   return obj;
@@ -80,17 +87,16 @@ function senshi () {
 function thuldrom () {
   let timg = document.getElementById('thuldrom')
   let obj = char();
-  obj.swingRad = 1;
+  obj.basic.maxcd = 25;
   obj.mhp = 150;
   obj.chp = 150;
   obj.image = timg;
   obj.weapon = weapon('hammer');
   obj.w = timg.width/10*4;
   obj.h = timg.height/10*4;
-  obj.swingrange = 100;
   this.startRad = 0;
   this.endRad = 0;
-  obj.bstart = meleestart;
+  obj.bstart = obj.bstart = function() {this.basic.currently = true};
   obj.bcont = meleecont;
   obj.estart = function() {
     console.log('e attack');
@@ -101,7 +107,7 @@ function thuldrom () {
     this.cmp = this.mmp;
     this.chp = this.mhp;
     if (this.lvl % 5 == 0 && this.weapon.range < 200) {this.weapon.range += 20;}
-    if (this.as < 10) this.as = 10;
+    if (this.mhp < 250) this.mhp += 10;
     this.lvlup();
   };
   obj.update = function () {

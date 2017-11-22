@@ -1,22 +1,40 @@
-let user, mobs
+let user, mobs, slimepics, slimetimer, currentScreen
 
-function init () {
+function startGame () {
   spawntimer = 0;
   bullets = [];
   mobs = [];
-  user = thuldrom();
+  mobs[0] = blooper();
+  mobs[0].pos = [650,650];
+  mobs[1] = goblinarcher();
+  mobs[1].pos = [800,500];
+  mobs[2] = goblinarcher();
+  mobs[2].pos = [800,800];
+  mobs[3] = goblinarcher();
+  mobs[3].pos = [500,500];
+  mobs[4] = goblinarcher();
+  mobs[4].pos = [500,800];
+  currentScreen = 'ingame';
+}
+
+function init () {
+  slimetimer = 0;
+  currentScreen = 'inmenu';
+  slimepics = [
+    document.getElementById('s1'),
+    document.getElementById('s2'),
+    document.getElementById('s3'),
+    document.getElementById('s4'),
+    document.getElementById('s5'),
+    document.getElementById('s6'),
+    document.getElementById('s7')
+  ];
+  spawntimer = 0;
+  bullets = [];
+  mobs = [];
+  user = char();
   createStats();
   createCanvas();
-  mobs[0] = blooper();
-  mobs[0].pos = [canvas.width/2,canvas.height/2];
-  mobs[4] = goblinarcher();
-  mobs[4].pos = [canvas.width/4,canvas.height*3/4];
-  mobs[1] = goblinarcher();
-  mobs[1].pos = [canvas.width/4,canvas.height/4];
-  mobs[2] = goblinarcher();
-  mobs[2].pos = [canvas.width*3/4,canvas.height/4];
-  mobs[3] = goblinarcher();
-  mobs[3].pos = [canvas.width*3/4,canvas.height*3/4]
   console.log('init completed');
 }
 
@@ -36,7 +54,7 @@ let checkTouching = function (o1,o2) {
 }
 
 function death () {
-  user = thuldrom();
+  currentScreen = 'inmenu';
 }
 
 function distBetween (o1,o2) {

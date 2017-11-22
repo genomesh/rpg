@@ -1,13 +1,26 @@
-let canvas, ctx, mouse, arena;
+let canvas, ctx, mouse;
 
 function createCanvas () {
   canvas = document.createElement('canvas');
   canvas.height = 500;
   canvas.width = 800;
   canvas.keys = [];
-  arena = createBackground();
+  menu.sb = button(canvas.width/2,50,canvas.width/2,50, () => currentScreen = 'charselect');
+  instructions.mb = button(canvas.width/2,250,canvas.width/3,50, () => currentScreen = 'inmenu');
+  menu.ib = button(canvas.width/2,150,canvas.width/2,50, () => currentScreen = 'instructions');
+  charselect.deab = button(canvas.width/4,150,canvas.width/6,150, () => {user = huntress();startGame()});
+  charselect.thuldromb = button(canvas.width/2,150,canvas.width/6,150, () => {user = thuldrom();startGame()});
+  charselect.senshib = button(canvas.width*3/4,150,canvas.width/6,150, () => {user = senshi();startGame()});
+  charselect.deab.text = 'D';
+  charselect.thuldromb.text = 'T';
+  charselect.senshib.text = 'S';
+  menu.sb.text = 'Play';
+  instructions.mb.text = 'Back to Menu';
+  menu.ib.text = 'Instructions';
   mouse = {
-    pos : [0,0]
+    pos : [0,0],
+    w : 0,
+    h : 0
   }
   ctx = canvas.getContext('2d');
   document.getElementById('gameArea').insertBefore(canvas, document.getElementById('gameArea').childNodes[0]);
@@ -32,23 +45,65 @@ function createCanvas () {
   })
 }
 
-function createBackground (x,y,img) {
-  return {
-    x : x,
-    y : y
+function updateCanvas () {
+  if (currentScreen === 'instructions') {
+    instructions.update();
+  } else if (currentScreen === 'ingame') {
+    ingame.update();
+  } else if (currentScreen === 'inmenu') {
+    menu.update();
+  } else if (currentScreen === 'charselect') {
+    charselect.update();
   }
 }
 
-function updateCanvas () {
-  spawntimer += 1;
-  //if (spawntimer % 30 == 0) {mobs.push(slime())}
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  for (let i = 0; i < mobs.length; i++) {mobs[i].update()}
-  user.update();
+function button (x,y,w,h, onclick) {
+  return {
+    pos : [x,y],
+    w : w,
+    h : h,
+    onClick : onclick,
+    c1 : 'grey',
+    c2 : 'lightgrey',
+    colour : 'grey',
+    onHover : function () {
+      this.colour = this.c2;
+      if (mouse.down) {
+        this.onClick();
+      }
+    },
+    offHover : function () {
+      this.colour = this.c1;
+    },
+    update : function () {
+      if (checkTouching(this,mouse)) {
+        this.onHover();
+      } else {
+        this.offHover();
+      }
+      this.draw();
+    },
+    draw : function () {
+      ctx.fillStyle = this.colour;
+      ctx.fillRect(this.pos[0]-this.w/2,this.pos[1]-this.h/2,this.w,this.h);
+      if (this.text) {
+        ctx.font= (this.h*2/3).toString() + "px consolas";
+        ctx.textBaseline = "hanging";
+        ctx.textAlign = 'center';
+        ctx.fillStyle = 'black';
+        ctx.fillText(this.text,this.pos[0],this.pos[1]-this.h/3);
+      }
+    }
+  }
 }
 
 function updateMousePos (c, e) {
   var rect = c.getBoundingClientRect();
-  mouse.pos[0] = user.pos[0] -canvas.width/2+ e.clientX - rect.left;
-  mouse.pos[1] = user.pos[1] -canvas.height/2 + e.clientY - rect.top
+  if (currentScreen === 'ingame') {
+    mouse.pos[0] = user.pos[0] -canvas.width/2+ e.clientX - rect.left;
+    mouse.pos[1] = user.pos[1] -canvas.height/2 + e.clientY - rect.top
+  } else {
+    mouse.pos[0] = e.clientX - rect.left;
+    mouse.pos[1] = e.clientY - rect.top
+  }
 }

@@ -1,5 +1,4 @@
 function char () {
-  let x, y, sigma, a, b;
   return {
     basic : {cd : 0,maxcd : 20, dmg : 10,currently : false},
     e : {cd : 0,maxcd : 20,currently : false},
@@ -14,7 +13,7 @@ function char () {
     h : 15,
     colour : 'black',
     vel : [0,0],
-    pos : [10,10],
+    pos : [0,0],
     takeDmg : function (dmg) {
       if (this.immunity == 0) {
         this.chp -= dmg;
@@ -31,7 +30,7 @@ function char () {
         }
       } else {this.immunity -= 1;}
       this.attack();
-      if (this.chp < 1) {this.death();}
+      if (this.chp < 1) {this.chp = 0; this.death();}
       this.move();
       this.draw();
     },
@@ -112,16 +111,12 @@ function weapon (imgid) {
   }
 }
 
-function meleestart () {
-  this.startRad = pointto(this,mouse) + this.weapon.frameRotates[this.weapon.frameRotates.length-1]* Math.PI;
-  //console.log(pointto(this,mouse));
-  this.endRad = pointto(this,mouse) + this.weapon.frameRotates[0]* Math.PI;
-  this.basic.currently = true; //add with animation
-}
 function meleecont () {
   let w = this.weapon;
   w.currentSide = w.frameRotates[w.frame] * w.leftright * Math.PI;
   if (w.frame === 2) {
+    this.startRad = pointto(this,mouse) + w.frameRotates[w.frameRotates.length-1]* Math.PI;
+    this.endRad = pointto(this,mouse) + w.frameRotates[0]* Math.PI;
     for (let i = 0; i<mobs.length; i++) {
       if (this.startRad < pointto(this, mobs[i]) &&
           this.endRad > pointto(this, mobs[i]) &&
