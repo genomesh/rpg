@@ -1,7 +1,9 @@
 function huntress () {
   let obj = char();
   obj.pierce = 0;
+  obj.e.learned = true;
   obj.e.dmg = 30;
+  obj.e.pierce = 2;
   obj.e.maxcd = 200;
   obj.basic.img = document.getElementById('arrow');
   obj.e.img = document.getElementById('gldarrow');
@@ -17,6 +19,7 @@ function huntress () {
       }
     } else {this.immunity -= 1;}
     if (this.chp < 1) {this.death();}
+    if (this.mmp > this.cmp) {this.cmp += 0.1;}
     this.move();
     this.attack();
     for (let i = 0; i < this.arrows.length; i++) {
@@ -37,15 +40,15 @@ function huntress () {
   };
   obj.bstart = function () {
     if (this.e.currently) {
-      this.arrows.push(arrow(this.e.img,this.pos[0],this.pos[1],this.vel[0],this.vel[1],pointto(this,mouse),this.pierce,this.basic.dmg + this.e.dmg));
+      this.arrows.push(arrow(this.e.img,this.pos[0],this.pos[1],this.vel[0],this.vel[1],pointto(this,mouse),this.pierce+this.e.pierce,this.basic.dmg + this.e.dmg));
       this.e.currently = false;
     } else {
       this.arrows.push(arrow(this.basic.img,this.pos[0],this.pos[1],this.vel[0],this.vel[1],pointto(this,mouse),this.pierce,this.basic.dmg));
     }
 
   }
-  obj.estart = function () {this.e.currently = true;}
-  obj.econt = function () {}
+  obj.estart = function () {this.e.currently = true;this.cmp -= 30;}
+  obj.econt = function () {this.e.cd = this.e.maxcd}
   return obj;
 }
 
@@ -115,10 +118,10 @@ function thuldrom () {
   obj.lvlup = function () {
     if (this.xp > 100 + this.lvl * 20) {this.xp -= 100 + this.lvl * 20; this.lvl += 1} else {return}
     this.as = 20 - this.lvl;
-    this.cmp = this.mmp;
-    this.chp = this.mhp;
     if (this.lvl % 5 == 0 && this.weapon.range < 200) {this.weapon.range += 20;}
     if (this.mhp < 250) this.mhp += 10;
+    this.cmp = this.mmp;
+    this.chp = this.mhp;
     this.lvlup();
   };
   obj.update = function () {

@@ -1,7 +1,7 @@
 function char () {
   return {
     basic : {cd : 0,maxcd : 20, dmg : 10,currently : false},
-    e : {cd : 0,maxcd : 20,currently : false},
+    e : {cd : 0,maxcd : 20,currently : false, learned : false},
     xp : 0,
     lvl : 0,
     mhp : 75,
