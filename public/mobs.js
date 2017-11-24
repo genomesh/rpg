@@ -1,5 +1,6 @@
-function slime () {
+function slime (x,y) {
   let obj = mob();
+  obj.pos = [x,y];
   obj.h=18;
   obj.w=18;
   obj.hp = 30;
@@ -13,7 +14,6 @@ function slime () {
   obj.bouncing = false;
   obj.image = document.getElementById("slime");
   obj.dimage = document.getElementById("dmgslime");
-  obj.pos = [canvas.width/2,canvas.height/2];
   obj.update = function () {
     this.invulnerable -= 1;
     if (this.bouncing) {
@@ -56,7 +56,7 @@ function blooper () {
     this.draw();
   };
   obj.spawnslime = function () {
-    if (this.spawntimer % 30 == 0) {mobs.push(slime())}
+    if (this.spawntimer % 30 == 0) {mobs.push(slime(this.pos[0],this.pos[1]));}
   }
   return obj;
 }
@@ -64,6 +64,7 @@ function blooper () {
 function goblinarcher () {
   let obj = mob();
   obj.mcd = [30,60];
+  obj.arrowimg = document.getElementById('arrow');
   obj.ccd = 0;
   obj.xpval = 75;
   obj.hp = 40;
@@ -85,7 +86,7 @@ function goblinarcher () {
     this.draw();
   };
   obj.shoot = function () {
-    this.arrows.push(arrow(this.pos[0],this.pos[1],0,0,pointto(this,user),0,this.arrowdmg,user));
+    this.arrows.push(arrow(this.arrowimg,this.pos[0],this.pos[1],0,0,pointto(this,user),0,this.arrowdmg,user));
   }
   return obj;
 }

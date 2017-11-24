@@ -1,6 +1,10 @@
 function huntress () {
   let obj = char();
   obj.pierce = 0;
+  obj.e.dmg = 30;
+  obj.e.maxcd = 200;
+  obj.basic.img = document.getElementById('arrow');
+  obj.e.img = document.getElementById('gldarrow');
   obj.arrows = [],
   obj.update = function () {
     if (this.immunity == 0) {
@@ -32,9 +36,16 @@ function huntress () {
     this.lvlup();
   };
   obj.bstart = function () {
-    this.arrows.push(arrow(this.pos[0],this.pos[1],this.vel[0],this.vel[1],pointto(this,mouse),this.pierce,this.basic.dmg));
+    if (this.e.currently) {
+      this.arrows.push(arrow(this.e.img,this.pos[0],this.pos[1],this.vel[0],this.vel[1],pointto(this,mouse),this.pierce,this.basic.dmg + this.e.dmg));
+      this.e.currently = false;
+    } else {
+      this.arrows.push(arrow(this.basic.img,this.pos[0],this.pos[1],this.vel[0],this.vel[1],pointto(this,mouse),this.pierce,this.basic.dmg));
+    }
+
   }
-  obj.estart = function () {console.log('E attack')}
+  obj.estart = function () {this.e.currently = true;}
+  obj.econt = function () {}
   return obj;
 }
 
@@ -85,7 +96,7 @@ function senshi () {
 }
 
 function thuldrom () {
-  let timg = document.getElementById('thuldrom')
+  let timg = document.getElementById('thuldrom');
   let obj = char();
   obj.basic.maxcd = 25;
   obj.mhp = 150;
@@ -111,6 +122,8 @@ function thuldrom () {
     this.lvlup();
   };
   obj.update = function () {
+    this.move();
+    this.attack();
     if (this.immunity == 0) {
       for (let i = 0; i<mobs.length;i++) {
         if (checkTouching(this,mobs[i])) {
@@ -120,8 +133,6 @@ function thuldrom () {
       }
     } else {this.immunity -= 1;}
     if (this.chp < 1) {this.death();}
-    this.move();
-    this.attack();
     this.weapon.draw(pointto(this,mouse));
     this.draw();
   };

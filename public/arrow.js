@@ -1,5 +1,6 @@
-function arrow (px,py,vx,vy,sig,pierce,dmg,target) {
-  let arrowimg = document.getElementById('arrow');
+function arrow (img,px,py,vx,vy,sig,pierce,dmg,target) {
+  let arrowimg = img;
+  console.log('dmg: ' + dmg);
   return {
     sigma: sig,
     speed : 9,
