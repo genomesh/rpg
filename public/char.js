@@ -1,13 +1,12 @@
 function char () {
   return {
     basic : {cd : 0,maxcd : 20, dmg : 10,currently : false},
-    e : {cd : 0,maxcd : 20,currently : false, learned : false},
+    e : {cd : 0,maxcd : 20,currently : false, learned : false, cost : 20},
+    ls : {cd : 0,maxcd : 20,currently : false, learned : false, cost : 20},
     xp : 0,
     lvl : 0,
-    mhp : 75,
-    chp : 75,
-    mmp : 100,
-    cmp : 100,
+    hp : {c : 75, m : 75, regen : 5},
+    mp : {c : 100, m : 100, regen : 20},
     immunity : 0,
     w : 15,
     h : 15,
@@ -16,7 +15,7 @@ function char () {
     pos : [0,0],
     takeDmg : function (dmg) {
       if (this.immunity == 0) {
-        this.chp -= dmg;
+        this.hp.c -= dmg;
         this.immunity = 20;
       }
     },
@@ -30,7 +29,7 @@ function char () {
         }
       } else {this.immunity -= 1;}
       this.attack();
-      if (this.chp < 1) {this.chp = 0; this.death();}
+      if (this.hp.c < 1) this.death();
       this.move();
       this.draw();
     },
@@ -48,11 +47,22 @@ function char () {
         this.econt();
       };
       if (this.e.cd === 0) {
-        if (canvas.keys[69]) {
+        if (canvas.keys[69] && this.mp.c >= this.e.cost && this.e.learned) {
           this.e.cd = this.e.maxcd;
+          this.mp.c -= this.e.cost;
           this.estart();
         }
       } else { this.e.cd -= 1;}
+      if (this.ls.currently) {
+        this.lscont();
+      };
+      if (this.ls.cd === 0) {
+        if (canvas.keys[16] && this.mp.c >= this.ls.cost && this.ls.learned) {
+          this.ls.cd = this.ls.maxcd;
+          this.mp.c -= this.ls.cost;
+          this.lsstart();
+        }
+      } else { this.ls.cd -= 1;}
     },
     xpinc : function (amount) {
       this.xp += amount;
@@ -64,7 +74,7 @@ function char () {
       if (this.as < 10) this.as = 10;
       this.lvlup();
     },
-    death : function () {death()},
+    death : function () {this.hp.c = 0;death()},
     move : function () {
       if (canvas.keys[65] && this.vel[0] > -7) {this.vel[0] -= 0.5};
       if (canvas.keys[68] && this.vel[0] < 7) {this.vel[0] += 0.5};
@@ -121,7 +131,6 @@ function meleecont () {
       if (this.startRad < pointto(this, mobs[i]) &&
           this.endRad > pointto(this, mobs[i]) &&
           w.range + mobs[i].w/2 > distBetween(this,mobs[i])) {
-        console.log('hit!')
         if (mobs[i].takeDmg(this.basic.dmg)) {
           mobs.splice(i,1);
           i -= 1;

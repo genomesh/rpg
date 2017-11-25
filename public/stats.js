@@ -6,13 +6,13 @@ function createStats () {
   stats.className = 'stats';
   stats.id = 'stats';
   sctx = stats.getContext('2d');
+  sctx.textBaseline = "hanging";
+  sctx.textAlign = "center";
   document.getElementById('gameArea').insertBefore(stats, document.getElementById('gameArea').childNodes[0]);
-  sctx.fillStyle = 'lightgrey';
-  sctx.fillRect(0,0,stats.width,stats.height);
   window.setInterval(updateStats,25);
 }
 
-function display (x,y,w,h,c) {
+function bar (x,y,w,h,c) {
   return {
     x : x,
     y : y,
@@ -29,14 +29,34 @@ function display (x,y,w,h,c) {
   }
 }
 
-let hpbar = display(10,10,100,20,'red');
-hpbar.getVal = () => user.chp/user.mhp;
-let mpbar = display(10,40,100,20,'aqua');
-mpbar.getVal = () => user.cmp/user.mmp;
-let xpbar = display(10,70,100,20,'green');
+function cdbar (x,y,w,h,c,t) {
+  let obj = bar(x,y,w,h,c);
+  obj.text = t;
+  obj.font = "16px consolas";
+  obj.fontc = 'black';
+  obj.draw = function () {
+    sctx.fillStyle = this.bc;
+    sctx.fillRect(this.x-3,this.y-3,this.w+6,this.h+6);
+    sctx.fillStyle = this.fc;
+    sctx.fillRect(this.x,this.y+this.h,this.w,-this.h*this.getVal());
+    if (this.img) {sctx.drawImage(this.img,this.x+2.5,this.y+2.5,45,45)}
+    sctx.font=this.font;
+    sctx.fillStyle = this.fontc;
+    sctx.fillText(this.text,this.x+this.w/2,this.y+this.h+5,this.w);
+  }
+  return obj;
+}
+
+let hpbar = bar(10,10,100,20,'red');
+hpbar.getVal = () => user.hp.c/user.hp.m;
+let mpbar = bar(10,40,100,20,'aqua');
+mpbar.getVal = () => user.mp.c/user.mp.m;
+let xpbar = bar(10,70,100,20,'green');
 xpbar.getVal = () => user.xp/(100+20*user.lvl);
 
-let ecd = display(150,35,50,50,'lightgrey');
+let ecd = cdbar(150,35,50,50,'lightgrey','e');
+let lscd = cdbar(210,35,50,50,'lightgrey','shift');
+
 ecd.getVal = () => {
   if (user.e.learned) {
     return user.e.cd/user.e.maxcd
@@ -44,39 +64,25 @@ ecd.getVal = () => {
     return 0;
   }
 }
-ecd.img = document.getElementById('gldarrowcd');
-ecd.draw = function () {
-  sctx.fillStyle = this.bc;
-  sctx.fillRect(this.x-3,this.y-3,this.w+6,this.h+6);
-  sctx.fillStyle = this.fc;
-  sctx.fillRect(this.x,this.y+this.h,this.w,-this.h*this.getVal());
-  sctx.drawImage(this.img,this.x+2.5,this.y+2.5,45,45)
+
+lscd.getVal = () => {
+  if (user.ls.learned) {
+    return user.ls.cd/user.ls.maxcd
+  } else {
+    return 0;
+  }
 }
 
-/*
-ecd.draw = function () {
-  sctx.fillStyle = this.bc;
-  sctx.fillRect(this.x-this.w/2,this.y-this.h/2,this.w,this.h);
-  sctx.fillStyle = this.fc;
-
-  sctx.beginPath();
-  //sctx.arc(this.x,this.y,this.w*0.45,this.getVal*Math.PI*2,Math.PI*2);
-  sctx.arc(this.x,this.y,this.w*0.4,1,Math.PI*2,false);
-  sctx.lineTo(this.x,this.y);
-  sctx.fill();
-  sctx.closePath()
-
-}*/
-
 function updateStats () {
+  if (user.e.learned && user.e.cdimg) {ecd.img = user.e.cdimg;}
+  if (user.ls.learned && user.ls.cdimg) {lscd.img = user.ls.cdimg;}
   sctx.clearRect(0,0,stats.width,stats.height);
   hpbar.draw();
   mpbar.draw();
   xpbar.draw();
   ecd.draw();
-  sctx.fillStyle = 'blue';
+  lscd.draw();
   sctx.font= "26px consolas";
-  sctx.textBaseline = "hanging";
   sctx.fillStyle = "black";
   sctx.fillText("Level: " + user.lvl.toString(),343,12,300);
 }

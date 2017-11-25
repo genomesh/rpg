@@ -1,6 +1,5 @@
 function arrow (img,px,py,vx,vy,sig,pierce,dmg,target) {
   let arrowimg = img;
-  console.log('dmg: ' + dmg);
   return {
     sigma: sig,
     speed : 9,
@@ -36,7 +35,6 @@ function arrow (img,px,py,vx,vy,sig,pierce,dmg,target) {
     test : function () {
       if (this.target) {
         if (checkTouching(this,this.target)) {
-          console.log('yeet');
           this.target.takeDmg(this.dmg);
           if (this.pierce == 0) return true;
           else this.pierce -= 1;
