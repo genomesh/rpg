@@ -1,8 +1,20 @@
 const ingame = {
+  bg : document.getElementById('darkbackgroundtile'),
+  bgw : 80,
   update : function () {
     ctx.clearRect(0,0,canvas.width,canvas.height);
+    this.drawbg();
     for (let i = 0; i < mobs.length; i++) {mobs[i].update()}
     user.update();
+  },
+  drawbg : function () {
+    for (let i = -1; i < canvas.width/this.bgw + 1; i++) {
+      for (let j = -1; j < canvas.height/this.bgw + 1; j++) {
+        let x = user.pos[0] % this.bgw;
+        let y = user.pos[1] % this.bgw;
+        ctx.drawImage(this.bg, this.bgw*i - x,this.bgw*j - y,this.bgw,this.bgw);
+      }
+    }
   }
 }
 
