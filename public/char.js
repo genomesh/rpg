@@ -19,7 +19,11 @@ function char () {
         this.immunity = 20;
       }
     },
-    update : function () {
+    bupdate : function () {
+      this.move();
+      this.heal(this.hp.regen/100);
+      this.restore(this.mp.regen/100);
+      this.attack();
       if (this.immunity == 0) {
         for (let i = 0; i<mobs.length;i++) {
           if (checkTouching(this,mobs[i])) {
@@ -28,10 +32,16 @@ function char () {
           }
         }
       } else {this.immunity -= 1;}
-      this.attack();
-      if (this.hp.c < 1) this.death();
-      this.move();
+      if (this.hp.c < 1) {this.death();}
       this.draw();
+    },
+    heal : function (amount) {
+      this.hp.c += amount;
+      if (this.hp.c>this.hp.m) this.hp.c=this.hp.m;
+    },
+    restore : function (amount) {
+      this.mp.c += amount;
+      if(this.mp.c>this.mp.m) this.mp.c=this.mp.m;
     },
     attack : function () {
       if (this.basic.currently) {
