@@ -5,15 +5,15 @@ function huntress () {
   obj.e.learned = true;
   obj.e.dmg = 30;
   obj.e.cdimg = document.getElementById('gldarrowcd');
-  obj.ls.cdimg = document.getElementById('divineicd');
   obj.e.pierce = 2;
   obj.e.maxcd = 200;
-  obj.ls.maxcd = 200;
   obj.e.cost = 30;
+  obj.e.img = document.getElementById('gldarrow');
+  obj.ls.cdimg = document.getElementById('divineicd');
+  obj.ls.maxcd = 200;
   obj.ls.cost = 50;
   obj.ls.timer = 50;
   obj.basic.img = document.getElementById('arrow');
-  obj.e.img = document.getElementById('gldarrow');
   obj.arrows = [],
   obj.update = function () {
     for (let i = 0; i < this.arrows.length; i++) {
@@ -60,12 +60,18 @@ function senshi () {
   let timg = document.getElementById('senshi')
   let obj = char();
   obj.hp.m = 100;
-  obj.basic.maxcd = 15;
+  obj.basic.maxcd = 20;
+  obj.basic.dmg = 15;
   obj.hp.c = 100;
   obj.image = timg;
   obj.weapon = weapon('redkatana');
-  obj.weapon.w = obj.weapon.image.width*3/10,
-  obj.weapon.h = obj.weapon.image.height*3/10,
+  obj.weapon.w = obj.weapon.image.width*3/10;
+  obj.weapon.h = obj.weapon.image.height*3/10;
+  obj.e.learned = true;
+  obj.e.cdimg = document.getElementById('dragonstrikecd');
+  obj.e.maxcd = 125;
+  obj.e.dmg = 20;
+  obj.e.cost = 50;
   obj.w = timg.width/10*2;
   obj.h = timg.height/10*2;
   this.startRad = 0;
@@ -73,8 +79,12 @@ function senshi () {
   obj.bstart = function() {this.basic.currently = true};
   obj.bcont = meleecont;
   obj.estart = function() {
-    console.log('e attack');
+    this.basic.cd = 0;
+    this.basic.bonus = 20;
+    this.weapon.frame = 0;
+    this.e.cd = this.e.maxcd;
   };
+  obj.econt = function () {}
   obj.lvlup = function () {
     if (this.xp > 100 + this.lvl * 20) {this.xp -= 100 + this.lvl * 20; this.lvl += 1} else {return}
     this.as = 20 - this.lvl;
@@ -94,7 +104,8 @@ function senshi () {
 function thuldrom () {
   let timg = document.getElementById('thuldrom');
   let obj = char();
-  obj.basic.maxcd = 25;
+  obj.basic.maxcd = 40;
+  obj.basic.dmg = 25;
   obj.hp.m = 150;
   obj.hp.c = 150;
   obj.image = timg;

@@ -1,6 +1,6 @@
 function char () {
   return {
-    basic : {cd : 0,maxcd : 20, dmg : 10,currently : false},
+    basic : {cd : 0,maxcd : 20, dmg : 10,currently : false,bonus : 0},
     e : {cd : 0,maxcd : 20,currently : false, learned : false, cost : 20},
     ls : {cd : 0,maxcd : 20,currently : false, learned : false, cost : 20},
     xp : 0,
@@ -137,11 +137,13 @@ function meleecont () {
   if (w.frame === 2) {
     this.startRad = pointto(this,mouse) + w.frameRotates[w.frameRotates.length-1]* Math.PI;
     this.endRad = pointto(this,mouse) + w.frameRotates[0]* Math.PI;
+    let swingdmg = this.basic.dmg + this.basic.bonus;
+    this.basic.bonus = 0;
     for (let i = 0; i<mobs.length; i++) {
       if (this.startRad < pointto(this, mobs[i]) &&
           this.endRad > pointto(this, mobs[i]) &&
           w.range + mobs[i].w/2 > distBetween(this,mobs[i])) {
-        if (mobs[i].takeDmg(this.basic.dmg)) {
+        if (mobs[i].takeDmg(swingdmg)) {
           mobs.splice(i,1);
           i -= 1;
         }
