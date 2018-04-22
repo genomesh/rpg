@@ -69,13 +69,15 @@ lscd.getVal = () => {
   if (user.ls.learned) {
     return user.ls.cd/user.ls.maxcd
   } else {
-    return 0;
+    return 0;f
   }
 }
 
 function updateStats () {
   if (user.e.learned && user.e.cdimg) {ecd.img = user.e.cdimg;}
+  else {ecd.img = false;}
   if (user.ls.learned && user.ls.cdimg) {lscd.img = user.ls.cdimg;}
+  else {lscd.img = false;}
   sctx.clearRect(0,0,stats.width,stats.height);
   hpbar.draw();
   mpbar.draw();

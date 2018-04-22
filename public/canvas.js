@@ -48,11 +48,11 @@ function createCanvas () {
 function updateCanvas () {
   if (currentScreen === 'instructions') {
     instructions.update();
-  } else if (currentScreen === 'ingame') {
+  } if (currentScreen === 'ingame') {
     ingame.update();
-  } else if (currentScreen === 'inmenu') {
+  } if (currentScreen === 'inmenu') {
     menu.update();
-  } else if (currentScreen === 'charselect') {
+  } if (currentScreen === 'charselect') {
     charselect.update();
   }
 }

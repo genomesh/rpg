@@ -1,11 +1,32 @@
 const ingame = {
   bg : document.getElementById('darkbackgroundtile'),
   bgw : 80,
+  abilityscreen : false,
+  canswap : true,
   update : function () {
+    if (canvas.keys[81]) {
+      if (this.canswap) {this.abilityscreen = this.abilityscreen ? false : true;
+        this.canswap = false;
+    }} else {this.canswap = true;}
+    this.abilityscreen ? this.ability() : this.ingame();
+  },
+  ingame : function () {
     ctx.clearRect(0,0,canvas.width,canvas.height);
     this.drawbg();
     for (let i = 0; i < mobs.length; i++) {mobs[i].update()}
     user.update();
+  },
+  ability : function () {
+    console.log('success');
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = 'grey';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.font= "40px consolas";
+    ctx.textBaseline = "hanging";
+    ctx.textAlign = 'center';
+    ctx.fillStyle = 'black';
+    ctx.fillText('Upgrades',canvas.width/2,canvas.height/2);
+    return(true);
   },
   drawbg : function () {
     for (let i = -1; i < canvas.width/this.bgw + 1; i++) {
