@@ -1,2 +1,15 @@
-if (3 >= 2) {console.log('big');}
-if (3 >= 3) {console.log('eq');}
+var double = x => x*2;
+var triple = x => x*3;
+var multiply = {
+  double : double,
+  triple : triple
+};
+
+(function() {
+    module.exports.getMultiply = function() { return multiply; }
+}());
+/*
+export function hello() {
+  return "Hello";
+}
+*/

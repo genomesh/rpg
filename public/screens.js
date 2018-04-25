@@ -9,15 +9,22 @@ const ingame = {
         this.canswap = false;
     }} else {this.canswap = true;}
     this.abilityscreen ? this.ability() : this.ingame();
+    socket.emit('update', JSON.stringify(user));
   },
   ingame : function () {
     ctx.clearRect(0,0,canvas.width,canvas.height);
     this.drawbg();
     for (let i = 0; i < mobs.length; i++) {mobs[i].update()}
+    console.log(otherUsers.length);
+    for (let i = 0; i < otherUsers.length; i++) {console.log('found');otherUsers[i].update()}
     user.update();
   },
   ability : function () {
-    console.log('success');
+    /*
+    if (this.canswap == false) {
+      console.log('update sent');
+      socket.emit('update', JSON.stringify(user));
+    }*/
     ctx.clearRect(0,0,canvas.width,canvas.height);
     ctx.fillStyle = 'grey';
     ctx.fillRect(0,0,canvas.width,canvas.height);
