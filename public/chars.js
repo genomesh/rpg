@@ -2,6 +2,7 @@ function huntress () {
   let obj = char();
   obj.basic.pierce = 0;
   obj.colour = 'white';
+  obj.spritesheet = document.getElementById('huntressSS');
   obj.e.learned = true;
   obj.e.dmg = 30;
   obj.e.cdimg = document.getElementById('gldarrowcd');

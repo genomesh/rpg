@@ -8,9 +8,14 @@ function char () {
     hp : {c : 75, m : 75, regen : 5},
     mp : {c : 100, m : 100, regen : 20},
     immunity : 0,
-    w : 15,
-    h : 15,
+    w : 32,
+    h : 32,
     colour : 'black',
+    action : 'still',
+    facing : 0,
+    frame : 0,
+    spritex : 0,
+    spritey : 0,
     vel : [0,0],
     pos : [0,0],
     takeDmg : function (dmg) {
@@ -98,9 +103,50 @@ function char () {
       mouse.pos[1] += this.vel[1];
     },
     draw : function () {
-      ctx.fillStyle = this.colour;
-      if (this.image) {ctx.drawImage(this.image,canvas.width/2-this.w/2,canvas.height/2-this.h/2,this.w,this.h)}
-      else {ctx.fillRect(canvas.width/2-this.w/2,canvas.height/2-this.h/2,this.w,this.h);}
+      ctx.imageSmoothingEnabled = false;
+      if (this.spritesheet) {
+        if (mouse.down) {this.action = 'basic'}
+        else if (this.vel[0] > 1 || this.vel[0] < -1 || this.vel[1] > 1 || this.vel[1] < -1) {this.action = 'moving'}
+        else {this.action = 'still'}
+        if (this.action == 'basic') {
+          this.facing = pointto(this,mouse);
+          if (this.frame < this.basic.maxcd/2) {this.spritex = 3}
+          else {this.spritex = 4}
+          if (-Math.PI/4 < this.facing && Math.PI/4 >= this.facing) {
+            this.facing='right';
+            this.spritey = 0;
+          } else if (Math.PI/4 < this.facing && 3*Math.PI/4 >= this.facing) {
+            this.facing='front';
+            this.spritey = 1;
+          } else if (-3*Math.PI/4 < this.facing && -Math.PI/4 >= this.facing) {
+            this.facing='back';
+            this.spritey = 2;
+          } else {
+            this.facing='left';
+            this.spritey = 3;
+          }
+          this.frame += 1;
+          if (this.frame > this.basic.maxcd) this.frame = 0;
+        }
+        if (this.action == 'moving') {
+          if (this.frame < this.basic.maxcd/2) {this.spritex = 1}
+          else {this.spritex = 2}
+          if (Math.abs(this.vel[0]) > Math.abs(this.vel[1])) {
+            if (this.vel[0]>0) {this.facing='right';this.spritey = 0;}
+            else {this.facing='left';this.spritey = 3;}
+          } else {
+            if (this.vel[1]>0) {this.facing='front';this.spritey = 1;}
+            else {this.facing='back';this.spritey = 2;}
+          }
+          this.frame += 1;
+          if (this.frame > this.basic.maxcd) this.frame = 0;
+        }
+        if (this.action == 'still') {
+          this.spritex = 0;
+        }
+        ctx.drawImage(this.spritesheet,this.spritex*8,this.spritey*8,8,8,canvas.width/2-this.w/2,canvas.height/2-this.h/2,this.w,this.h)
+      } else if (this.image) {ctx.drawImage(this.image,canvas.width/2-this.w/2,canvas.height/2-this.h/2,this.w,this.h)
+      } else {ctx.fillStyle = this.colour;ctx.fillRect(canvas.width/2-this.w/2,canvas.height/2-this.h/2,this.w,this.h);}
     }
   }
 }

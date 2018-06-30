@@ -51,9 +51,9 @@ function user (id) {
 }
 
 function sendPos () {
-  console.log('sending');
-    if (users.length > 0) {
-        io.emit('update',JSON.stringify(users));
-    }
+  //console.log('sending');
+  if (users.length > 0) {
+      io.emit('update',JSON.stringify(users));
+  }
 }
 setInterval(sendPos,25);
